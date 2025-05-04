@@ -24,7 +24,7 @@ export default function App() {
     const currentDate = new Date(); //Date Format
     const entries = Object.entries(data);
     // entries = [[hourlyTime,{properties}],[12:30pm(24th april),{}]...]
-    console.log(entries);
+    // console.log(entries);
     const todayData = entries.filter(([dateString]) => {
       const date = new Date(dateString); // converting string value to Date
       return (
@@ -33,10 +33,10 @@ export default function App() {
         date.getFullYear() === currentDate.getFullYear()
       );
     });
-    console.log(todayData); //19 datas
+    // console.log(todayData); //19 datas
     let closestTimeDiff = Math.abs(currentDate - new Date(todayData[0][0]));
     let closestTimeIndex = 0;
-    console.log(closestTimeDiff);
+    // console.log(closestTimeDiff);
 
     //Find the closest time from the current time
     todayData.forEach(([dateString], index) => {
@@ -46,8 +46,6 @@ export default function App() {
         closestTimeDiff = timeDiff;
         closestTimeIndex = index;
       }
-      console.log(closestTimeDiff);
-      console.log(closestTimeIndex);
     });
 
     //Add a flag to the closest time entry
@@ -107,10 +105,12 @@ export default function App() {
       visibility: hourly.visibility,
       windDirection10m: hourly.windDirection10m,
       apparentTemperature: hourly.apparentTemperature,
-      precipitationSum: hourly.precipitationSum,
+      precipitationProbability: hourly.precipitationProbability,
       humidity: hourly.humidity,
       windSpeed: hourly.windSpeed,
       weatherCode: hourly.weatherCode,
+      cloudCover: hourly.cloudCover,
+      surfacePressure: hourly.surfacePressure,
     });
     const hourlyData = filterAndFlagClosestTime(hourlyFormatted);
     return { hourlyData, dailyData };
@@ -129,6 +129,8 @@ export default function App() {
         "precipitation_probability",
         "relative_humidity_2m",
         "wind_speed_10m",
+        "cloud_cover",
+        "surface_pressure",
       ],
       daily: [
         "weather_code",
@@ -155,7 +157,7 @@ export default function App() {
 
     // Process first location. Add a for-loop for multiple locations or weather models
     const response = responses[0];
-    console.log(response);
+    // console.log(response);
 
     // Attributes for timezone and location
     const utcOffsetSeconds = response.utcOffsetSeconds();
@@ -175,9 +177,11 @@ export default function App() {
         visibility: hourly.variables(2).valuesArray(),
         windDirection10m: hourly.variables(3).valuesArray(),
         apparentTemperature: hourly.variables(4).valuesArray(),
-        precipitation_probability: hourly.variables(5).valuesArray(),
+        precipitationProbability: hourly.variables(5).valuesArray(),
         humidity: hourly.variables(6).valuesArray(),
         windSpeed: hourly.variables(7).valuesArray(),
+        cloudCover: hourly.variables(8).valuesArray(),
+        surfacePressure: hourly.variables(9).valuesArray(),
       },
       daily: {
         time: range(
@@ -224,7 +228,9 @@ export default function App() {
           .then((location) => {
             setForecastLocation({
               label: `${
-                location?.address?.city ?? location?.address?.village
+                location?.address?.city ??
+                location?.address?.village ??
+                location?.address?.suburb
               }, ${location?.address?.state}, ${location?.address?.country}`,
               lat: location?.lat,
               lon: location?.lon,

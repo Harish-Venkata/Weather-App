@@ -173,10 +173,8 @@ export default function SearchResult({
               />
               <UnitMetrixComp
                 label="Chance of Rain"
-                value={Math.floor(
-                  currentWeatherData[0]?.value?.precipitationsum
-                )}
-                unit="mm"
+                value={currentWeatherData[0]?.value?.precipitationProbability}
+                unit=" mm"
               />
             </div>
             <div className="unit-metrix-container">
@@ -185,12 +183,12 @@ export default function SearchResult({
                 value={Math.floor(
                   currentWeatherData[0]?.value?.surfacePressure
                 )}
-                unit="hpa"
+                unit=" hpa"
               />
               <UnitMetrixComp
                 label="Cloud Cover"
-                value={Math.floor(currentWeatherData[0]?.value?.cloudCover)}
-                unit="%"
+                value={currentWeatherData[0]?.value?.cloudCover}
+                unit=" %"
               />
             </div>
           </CardLayout>

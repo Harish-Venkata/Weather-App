@@ -343,6 +343,7 @@ p {
 .single-day {
   border-bottom: 1px solid #7670e9;
   padding: 6px 0px;
+  margin-bottom: 20px;
 }
 
 .temp-graph-card-layout {
